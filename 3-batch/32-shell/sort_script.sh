@@ -22,6 +22,7 @@ compare_sequences() {
     local sequence1="$1"
     local sequence2="$2"
 
+    # 使用 paste -s -d ',' - 命令将排序后的数组重新连接成逗号分隔的字符串。
     sorted_sequence1=$(echo "$sequence1" | tr ',' '\n' | sort -n | paste -s -d ',' -)
     sorted_sequence2=$(echo "$sequence2" | tr ',' '\n' | sort -n | paste -s -d ',' -)
 
