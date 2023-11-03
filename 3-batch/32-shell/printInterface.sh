@@ -1,29 +1,33 @@
 #!/bin/bash
 # 输出表头
-
-<<comment
-@RestController
-public class ModelVehicleManageController {
-
-	@Resource
-	private ModelVehicleManageBizService modelVehicleManageBizService;
-
-	/**
-	 * <p>分页获取标准车型列表</p>
-	 * @param req
-	 * @return
-	 */
-	@PostMapping("/manage/vehicle/model-vehicle/get-page-list")
-	public Result<PageVO<ModelVehicleListDTO>> getPageList(@Validated @RequestBody ModelVehicleListReq req) {
-		return Result.buildSuccess(modelVehicleManageBizService.getPageList(req));
-	}
-}
-comment
+#
+#@RestController
+#public class ModelVehicleManageController {
+#
+#	@Resource
+#	private ModelVehicleManageBizService modelVehicleManageBizService;
+#
+#	/**
+#	 * <p>分页获取标准车型列表</p>
+#	 * @param req
+#	 * @return
+#	 */
+#	@PostMapping("/manage/vehicle/model-vehicle/get-page-list")
+#	public Result<PageVO<ModelVehicleListDTO>> getPageList(@Validated @RequestBody ModelVehicleListReq req) {
+#		return Result.buildSuccess(modelVehicleManageBizService.getPageList(req));
+#	}
+#}
 
 # 指定Java文件路径
 #java_file=""
-# 从标准输入中读取
-java_file = $1
+
+# ./printInterface.sh "文件路径"
+#java_file=$1
+
+# 控制台输入  "D:/a.txt" 注意要带上引号
+read -p "请输入文件路径:" java_file
+
+#!/bin/bash
 
 ## 解析Java文件，获取所有形如@PostMapping行的中的路径，并存储为url变量
 url=$(grep -oE '@PostMapping\("([^"]+)"\)' $java_file | sed 's/@PostMapping("\(.*\)")/\1/')
