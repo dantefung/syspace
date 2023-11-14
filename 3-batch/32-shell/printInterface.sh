@@ -59,6 +59,15 @@ comment
 ## 解析Java文件，获取所有形如@PostMapping行的中的路径，并存储为url变量
 url=$(grep -oE '@PostMapping\("([^"]+)"\)' $java_file | sed 's/@PostMapping("\(.*\)")/\1/')
 
+
+<< comment
+<p>([^<]+)</p>是一个正则表达式，它用于匹配以<p>开头，以</p>结尾并且中间包含非<字符的内容。
+
+<p>：匹配 <p>。
+([^<]+)：一个捕获组，用于匹配一个或多个非 < 字符。
+</p>：匹配 </p>。
+comment
+
 ## 截取形如<p>删除标准车型</p>中<p>内的注释内容，并存储为desc变量
 desc=$(grep -oE '<p>([^<]+)</p>' $java_file | sed 's/<p>\(.*\)<\/p>/\1/')
 
