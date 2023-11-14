@@ -27,6 +27,35 @@ java_file=$1
 # 控制台输入  "D:/a.txt" 注意要带上引号
 #read -p "请输入文件路径,注意带上双引号:" java_file
 
+<< comment
+这段代码是一个Shell脚本的命令，用于从Java文件中提取@PostMapping注解的URL路径。
+
+让我们逐步解释这段代码的不同部分：
+
+$(...)：这是Shell中的命令替换语法，它会执行括号内的命令，并将其输出作为变量的值。
+
+grep -oE '@PostMapping\("([^"]+)"\)' $java_file：这是一个grep命令，用于从$java_file文件中匹配并显示所有符合正则表达式@PostMapping\("([^"]+)"\)的内容。
+
+-o选项表示只显示匹配的部分。
+-E选项表示使用扩展的正则表达式。
+sed 's/@PostMapping("\(.*\)")/\1/'：这是一个s命令，用于在输出中执行替换操作。
+
+'s/@PostMapping("\(.*\)")/\1/'是一个替换操作的正则表达式，它会将匹配的内容替换为捕获组\1的值。
+\(.*\)是一个捕获组，匹配@PostMapping("和")之间的任意字符。
+\1表示捕获组中的内容。
+
+@PostMapping\("([^"]+)"\)是一个正则表达式，它用于匹配以@PostMapping("开头，以")结尾并且中间包含非引号字符的内容。
+
+@PostMapping\(：匹配@PostMapping("，反斜杠\用于转义括号的特殊含义。
+([^"]+)：一个捕获组，用于匹配一个或多个非引号字符。
+"：匹配引号字符。
+
+最后，将通过grep命令提取的URL路径存储在变量url中。
+
+请注意，这段代码假设Java文件中的@PostMapping注解使用了双引号包裹URL路径。如果注解中使用了其他类型的引号或没有引号包裹URL，代码可能需要相应修改。
+
+comment
+
 ## 解析Java文件，获取所有形如@PostMapping行的中的路径，并存储为url变量
 url=$(grep -oE '@PostMapping\("([^"]+)"\)' $java_file | sed 's/@PostMapping("\(.*\)")/\1/')
 
