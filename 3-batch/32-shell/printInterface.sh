@@ -18,16 +18,32 @@
 #	}
 #}
 
-# 指定Java文件路径
-#java_file=""
 
-# ./printInterface.sh "文件路径"
-java_file=$1
+printJobUrl() {
 
-# 控制台输入  "D:/a.txt" 注意要带上引号
+  local java_file_path=$java_file
+
+  # 使用grep命令匹配Java文件中的@GetMapping注解，并过滤以/job开头的URL地址
+  urls=$(grep -Eo '@GetMapping\("[^"]*/job[^"]*"' "$java_file_path" | cut -d "\"" -f 2)
+
+  # 遍历匹配的URL地址
+  for url in $urls
+  do
+      # 输出匹配的URL，格式为"|$url|"
+      echo "|$url|"
+  done
+
+}
+
+
+printInterfaceTable() {
+
+local java_file_path=$java_file
+  # 控制台输入  "D:/a.txt" 注意要带上引号
 #read -p "请输入文件路径,注意带上双引号:" java_file
 
 << comment
+
 这段代码是一个Shell脚本的命令，用于从Java文件中提取@PostMapping注解的URL路径。
 
 让我们逐步解释这段代码的不同部分：
@@ -53,12 +69,9 @@ sed 's/@PostMapping("\(.*\)")/\1/'：这是一个s命令，用于在输出中执
 最后，将通过grep命令提取的URL路径存储在变量url中。
 
 请注意，这段代码假设Java文件中的@PostMapping注解使用了双引号包裹URL路径。如果注解中使用了其他类型的引号或没有引号包裹URL，代码可能需要相应修改。
-
 comment
-
 ## 解析Java文件，获取所有形如@PostMapping行的中的路径，并存储为url变量
-url=$(grep -oE '@PostMapping\("([^"]+)"\)' $java_file | sed 's/@PostMapping("\(.*\)")/\1/')
-
+url=$(grep -oE '@PostMapping\("([^"]+)"\)' $java_file_path | sed 's/@PostMapping("\(.*\)")/\1/')
 
 << comment
 <p>([^<]+)</p>是一个正则表达式，它用于匹配以<p>开头，以</p>结尾并且中间包含非<字符的内容。
@@ -69,7 +82,7 @@ url=$(grep -oE '@PostMapping\("([^"]+)"\)' $java_file | sed 's/@PostMapping("\(.
 comment
 
 ## 截取形如<p>删除标准车型</p>中<p>内的注释内容，并存储为desc变量
-desc=$(grep -oE '<p>([^<]+)</p>' $java_file | sed 's/<p>\(.*\)<\/p>/\1/')
+desc=$(grep -oE '<p>([^<]+)</p>' $java_file_path | sed 's/<p>\(.*\)<\/p>/\1/')
 
 # 声明一个名为 arr 的数组
 arr=("svc-cn" "svc-hk" "svc-manage")
@@ -129,5 +142,46 @@ done
 #for i in "${!desc[@]}"; do
 #  printf "|商家PC服务端 | %s | 是 | %s |\n" "${desc[$i]}" "${url[$i]}"
 #done
+}
+
+
+
+# 指定Java文件路径
+#java_file=""
+
+# ./printInterface.sh "文件路径"
+java_file=$1
+
+
+# 输出菜单选项
+echo "请选择一个选项："
+echo "1. 打印Job的地址"
+echo "2. 打印接口表格"
+
+# 读取用户的选择
+read choice
+echo "您选择了$choice"
+
+#echo "请输入您要解析的Java文件绝对路径,注意带上双引号"
+#read java_file
+#echo "你输入了: $java_file"
+
+# 根据用户选择执行相应的操作
+case $choice in
+    1)
+        echo "执行打印Job的地址"
+        printJobUrl $java_file
+        ;;
+    2)
+        echo "执行打印接口表格"
+        printInterfaceTable $java_file
+        ;;
+    *)
+        echo "无效的选项"
+        ;;
+esac
+
+
+
 
 
