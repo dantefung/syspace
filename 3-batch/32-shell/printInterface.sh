@@ -17,12 +17,13 @@
 #		return Result.buildSuccess(modelVehicleManageBizService.getPageList(req));
 #	}
 #}
+# 注意: 路径不要有空格
 
 
 printJobUrl() {
 
   local java_file_path=$java_file
-
+zhu
   # 使用grep命令匹配Java文件中的@GetMapping注解，并过滤以/job开头的URL地址
   urls=$(grep -Eo '@GetMapping\("[^"]*/job[^"]*"' "$java_file_path" | cut -d "\"" -f 2)
 
@@ -69,6 +70,17 @@ sed 's/@PostMapping("\(.*\)")/\1/'：这是一个s命令，用于在输出中执
 最后，将通过grep命令提取的URL路径存储在变量url中。
 
 请注意，这段代码假设Java文件中的@PostMapping注解使用了双引号包裹URL路径。如果注解中使用了其他类型的引号或没有引号包裹URL，代码可能需要相应修改。
+
+`grep -oE` 是GNU `grep` 命令行选项的组合，它具有特定的功能：
+
+- `-o`（--only-matching）选项：
+  这个选项告诉 `grep` 命令只输出匹配到的文本，而不是整行。这意味着只有真正匹配正则表达式的部分会被打印到标准输出。
+
+- `-E`（--extended-regexp）选项：
+  这个选项指定了使用扩展正则表达式（ERE）。扩展正则表达式提供比基本正则表达式（BRE）更丰富的语法，比如支持 `|` 表示逻辑或（alternation）、`?` 表示零次或一次出现、`+` 表示一次或多次出现、`()` 用于分组和后向引用等特性。
+
+因此，当你执行 `grep -oE 'pattern' file` 时，`grep` 将会查找文件 `file` 中与 `'pattern'` 扩展正则表达式相匹配的文本，并仅输出那些匹配的部分。
+
 comment
 ## 解析Java文件，获取所有形如@PostMapping行的中的路径，并存储为url变量
 url=$(grep -oE '@PostMapping\("([^"]+)"\)' $java_file_path | sed 's/@PostMapping("\(.*\)")/\1/')
@@ -80,6 +92,17 @@ url=$(grep -oE '@PostMapping\("([^"]+)"\)' $java_file_path | sed 's/@PostMapping
 ([^<]+)：一个捕获组，用于匹配一个或多个非 < 字符。
 </p>：匹配 </p>。
 comment
+
+# # 假设输入来自于文件input.txt
+# content=$(cat $java_file)
+
+# # 使用grep匹配@PostMapping行
+# matched_line=$(grep -oE '@PostMapping\("[^"]*"\)' <<< "$content")
+
+# # 使用sed提取双引号内的内容
+# path=$(echo "$matched_line" | sed 's/.*"\([^"]*\)".*/\1/')
+
+# echo "提取出的路径: $path"
 
 ## 截取形如<p>删除标准车型</p>中<p>内的注释内容，并存储为desc变量
 desc=$(grep -oE '<p>([^<]+)</p>' $java_file_path | sed 's/<p>\(.*\)<\/p>/\1/')
