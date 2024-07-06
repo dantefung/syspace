@@ -1,30 +1,30 @@
-:: DATE: 2021Äê3ÔÂ24ÈÕ 11:20:07
+:: DATE: 2021å¹´3æœˆ24æ—¥ 11:20:07
 :: AUTHOR: DANTE FUNG
-:: DESC: ÅúÁ¿µ¼ÈëÄ³¸öÎÄ¼ş¼ĞÏÂµÄsql½Å±¾µ½Ö¸¶¨µÄ¿âÀï
+:: DESC: æ‰¹é‡å¯¼å…¥æŸä¸ªæ–‡ä»¶å¤¹ä¸‹çš„sqlè„šæœ¬åˆ°æŒ‡å®šçš„åº“é‡Œ
 
 @echo off  
 set errorlevel=0  
   
-:: ĞŞ¸ÄÎªmysql°²×°Â·¾¶   
+:: ä¿®æ”¹ä¸ºmysqlå®‰è£…è·¯å¾„   
 set path_home_mysql=D:\software\develop\phpstudy\phpstudy_pro\Extensions\MySQL8.0.12\
 set path_bin_mysql=%path_home_mysql%bin\  
   
-:: ĞŞ¸ÄÎªmysqlÊ¹ÓÃµÄÊı¾İÃû(local_test)   
+:: ä¿®æ”¹ä¸ºmysqlä½¿ç”¨çš„æ•°æ®å(local_test)   
 set database_mysql=local_test  
   
-:: ĞŞ¸ÄÎªmysqlµÇÂ½ÓÃ»§ÃûÃÜÂë(root,sujian)   
+:: ä¿®æ”¹ä¸ºmysqlç™»é™†ç”¨æˆ·åå¯†ç (root,sujian)   
 set user_mysql=root  
 set password_mysql=root  
   
 echo %path_bin_mysql%
-:: ±éÀúµ±Ç°ÎÄ¼ş¼ĞÏÂµÄËùÓĞsqlÎÄ¼ş²¢µ¼ÈëÖ¸¶¨µÄÊı¾İ¿âÄÚ.
+:: éå†å½“å‰æ–‡ä»¶å¤¹ä¸‹çš„æ‰€æœ‰sqlæ–‡ä»¶å¹¶å¯¼å…¥æŒ‡å®šçš„æ•°æ®åº“å†….
 set "target=%cd%"
 for /f "delims=" %%a in ('dir /b /a-d "%target%\*.sql"') do (
    echo  "------------------START------------------ "
-   echo  ¿ªÊ¼µ¼Èë %%a ÎÄ¼ş ...
+   echo  å¼€å§‹å¯¼å…¥ %%a æ–‡ä»¶ ...
    cd %path_bin_mysql%
    mysql -u%user_mysql% -p%password_mysql% %database_mysql% < %%a
-   echo  µ¼Èë %%a ÎÄ¼şÍê³É!
+   echo  å¯¼å…¥ %%a æ–‡ä»¶å®Œæˆ!
    echo  "------------------END------------------ "
    echo  "  "
 )
