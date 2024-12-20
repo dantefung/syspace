@@ -1,7 +1,16 @@
 #!/bin/bash
 
-PROXY_HOST=192.168.1.1
-PROXY_PORT=1080
+# 使用代理
+# ./local_arthas_tunnel.sh 192.168.1.1 1080
+# 不使用代理
+# ./local_arthas_tunnel.sh 
+
+PROXY_HOST=$1
+PROXY_PORT=$2
+
+if [ -n "$PROXY_HOST" ] && [ -n "$PROXY_PORT" ]; then
+  echo "代理服务器  $PROXY_HOST:$PROXY_PORT"
+fi
 
 # 检查并下载 arthas-tunnel-server-x.y.z-fatjar.jar
 ARTHAS_TUNNEL_JAR="arthas-tunnel-server-4.0.4-fatjar.jar"
@@ -41,6 +50,9 @@ else
     # 2>&1：将标准错误重定向到标准输出，确保所有日志都写入同一个文件。
     # & 将命令放到后台运行。
     nohup java -Dserver.port=8081 -jar -Darthas.enable-detail-pages=true $ARTHAS_TUNNEL_JAR > arthas-tunnel-server.log 2>&1 &
+
+    # 睡眠 8s
+    sleep 8
 fi
 
 # 如果存在arthas进程则杀掉重启
@@ -58,8 +70,8 @@ rm -rf arthas.log
 nohup java -jar arthas-boot.jar 1 --tunnel-server 'ws://127.0.0.1:7777/ws' > arthas.log 2>&1 &
 
 echo "启动中, 请稍等..."
-# 睡眠5s
-sleep 5
+# 睡眠10s
+sleep 10
 
 # 获取主机的IP地址
 ip_address=$(hostname -I | awk '{print $1}')

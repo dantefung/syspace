@@ -34,3 +34,4 @@ echo "所有参数 (作为单个字符串): $*"
 echo "----测试默认值-----"
 param1=${1:-"i'm default_value"}
 echo "参数1: $param1"
+
