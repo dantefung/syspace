@@ -65,7 +65,7 @@ fi
 echo "删除arthas.log日志, 启动arthas-boot"
 rm -rf arthas.log
 
-# 静默 attach 到进程ID为1，并提取session ID
+# 静默 attach 到进程ID为1
 #nohup java -jar arthas-boot.jar 1 --tunnel-server 'ws://127.0.0.1:7777/ws' --batch-script get_session.script > arthas.log 2>&1 &
 nohup java -jar arthas-boot.jar 1 --tunnel-server 'ws://127.0.0.1:7777/ws' > arthas.log 2>&1 &
 
