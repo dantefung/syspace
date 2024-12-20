@@ -8,7 +8,12 @@ ARTHAS_TUNNEL_JAR="arthas-tunnel-server-4.0.4-fatjar.jar"
 # 使用 [ ! -f "$ARTHAS_TUNNEL_JAR" ] 检查文件是否存在
 if [ ! -f "$ARTHAS_TUNNEL_JAR" ]; then
     echo '下载 arthas-tunnel-server-x.y.z-fatjar.jar'
-    curl -x HTTPS_PROXY://$PROXY_HOST:$PROXY_PORT -OL https://github.com/alibaba/arthas/releases/download/arthas-all-4.0.4/$ARTHAS_TUNNEL_JAR
+    if [ -n "$PROXY_HOST" ] && [ -n "$PROXY_PORT" ]; then
+        echo "使用代理下载 $ARTHAS_TUNNEL_JAR"
+        curl -x HTTPS_PROXY://$PROXY_HOST:$PROXY_PORT -OL https://github.com/alibaba/arthas/releases/download/arthas-all-4.0.4/$ARTHAS_TUNNEL_JAR
+    else 
+        curl -OL https://github.com/alibaba/arthas/releases/download/arthas-all-4.0.4/$ARTHAS_TUNNEL_JAR
+    fi
 else
     echo "$ARTHAS_TUNNEL_JAR 已经存在，跳过下载."
 fi
@@ -17,7 +22,12 @@ fi
 ARTHAS_BOOT_JAR="arthas-boot.jar"
 if [ ! -f "$ARTHAS_BOOT_JAR" ]; then
     echo '下载 arthas-boot.jar'
-    curl -x HTTPS_PROXY://$PROXY_HOST:$PROXY_PORT -OL https://alibaba.github.io/arthas/$ARTHAS_BOOT_JAR
+    if [ -n "$PROXY_HOST" ] && [ -n "$PROXY_PORT" ]; then
+        echo "使用代理下载 $ARTHAS_BOOT_JAR" 
+        curl -x HTTPS_PROXY://$PROXY_HOST:$PROXY_PORT -OL https://alibaba.github.io/arthas/$ARTHAS_BOOT_JAR
+    else
+        curl -OL https://alibaba.github.io/arthas/$ARTHAS_BOOT_JAR
+    fi
 else
     echo "$ARTHAS_BOOT_JAR 已经存在，跳过下载."
 fi
