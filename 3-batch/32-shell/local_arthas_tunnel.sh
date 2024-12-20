@@ -79,9 +79,9 @@ echo '请在浏览器打开如下链接:'
 echo "                       "
 echo "http://$ip_address:8081"
 echo "                       "
-# 提取 sessionId
+# 提取 agentId
 sessionId=$(cat arthas.log | grep -v pid | grep id | awk '{print $2}')
-echo "请填写sessionId:"
+echo "请填写agentId:"
 echo "                       "
 echo $sessionId
 echo "                       "
