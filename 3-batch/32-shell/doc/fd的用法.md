@@ -347,3 +347,72 @@ fd -x grep -nE "TODO|FIXME" {}
 ---
 
 
+明白了！你想要一个 **可自定义关键字** 的 `fd + grep` 工具，能高亮显示关键词，输出文件名、行号、匹配内容，并跳过目录。
+
+我来帮你写一个通用函数：👇
+
+---
+
+## ✅ Bash/Zsh 函数：`fsearch`
+
+```bash
+fsearch() {
+  local keyword="${1:-TODO}"  # 如果没给参数，默认搜索 TODO
+
+  if [[ -z "$keyword" ]]; then
+    echo "Usage: fsearch <keyword>"
+    return 1
+  fi
+
+  fd --type f -x grep --color=always -nH "$keyword" {}
+}
+```
+
+---
+
+### 🧪 示例用法：
+
+```bash
+fsearch              # 默认查 TODO
+fsearch FIXME        # 查找 FIXME
+fsearch 'HACK|BUG'   # 正则匹配多个关键词
+```
+
+---
+
+### 📥 添加到配置文件：
+
+将上面的函数粘贴到你的 `~/.bashrc`、`~/.zshrc` 或 `~/.config/fish/config.fish`（fish shell 需要语法适配）中，然后：
+
+```bash
+source ~/.zshrc   # 或 source ~/.bashrc
+```
+
+---
+
+### 🧠 可选增强功能：
+
+如果你还想要分页（配合 `less`）或交互选择（配合 `fzf`），也可以这样扩展：
+
+#### ✅ 分页版本（带颜色预览）：
+
+```bash
+fsearch() {
+  local keyword="${1:-TODO}"
+  fd --type f -x grep --color=always -nH "$keyword" {} | less -R
+}
+```
+
+#### ✅ fzf 交互版本（可选择跳转）：
+
+```bash
+fsearchf() {
+  local keyword="${1:-TODO}"
+  fd --type f -x grep --color=always -nH "$keyword" {} | fzf --ansi
+}
+```
+
+---
+
+需要我继续帮你整合 bat 代码高亮、跳转到文件位置、或保存结果？随时说！
+
