@@ -260,5 +260,90 @@ function cdto() {
 
 
 ```
+----
+
+
+当然！我们来逐部分解析这条命令：
+
+```bash
+fd -x grep -n TODO {}
+```
+
+---
+
+### 🔧 命令分解：
+
+| 部分             | 含义                              |
+| -------------- | ------------------------------- |
+| `fd`           | 使用 `fd` 工具来查找文件（比 `find` 更快更简洁） |
+| `-x`           | 指定对每一个查找到的结果都执行一次后面的命令（逐个执行）    |
+| `grep -n TODO` | 在每个文件中查找包含 `TODO` 字符串的行，并显示行号   |
+| `{}`           | 占位符，表示每个 `fd` 找到的文件路径会替换到这个位置上  |
+
+---
+
+### 🧠 举例说明：
+
+假设你的项目目录中有以下文件：
+
+```
+src/app.js         （包含一行注释：// TODO: implement login）
+README.md          （没有 TODO）
+config/settings.js （包含一行注释：// TODO: refactor）
+```
+
+运行：
+
+```bash
+fd -x grep -n TODO {}
+```
+
+等价于执行：
+
+```bash
+grep -n TODO src/app.js
+grep -n TODO config/settings.js
+```
+
+输出会类似：
+
+```
+src/app.js:12:// TODO: implement login
+config/settings.js:3:// TODO: refactor
+```
+
+---
+
+### ✅ 总结：用途场景
+
+这条命令的用途是：
+
+> 🔍 **递归搜索所有文件中包含 `TODO` 的行，带行号显示**
+
+很适合开发时快速定位代码中的 TODO / FIXME / HACK 等标记任务项。
+
+---
+
+### 💡 衍生用法建议：
+
+1. **忽略某些目录：**
+
+```bash
+fd -x grep -n TODO {} --exclude node_modules --exclude dist
+```
+
+2. **支持颜色高亮（手动加 `--color=always`）：**
+
+```bash
+fd -x grep --color=always -n TODO {}
+```
+
+3. **查找多个关键词（正则匹配）：**
+
+```bash
+fd -x grep -nE "TODO|FIXME" {}
+```
+
+---
 
 
